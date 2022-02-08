@@ -4,6 +4,10 @@ include_once '../include/fonctions.php';
 
 header('Content-Type: application/json;');
 header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Methods: POST, DELETE, PUT, OPTIONS");
+header('Access-Control-Allow-Headers: Content-Type');
+
+
 
 $mysqli = new mysqli($host, $username, $password, $database);
 if ($mysqli->connect_errno) {
