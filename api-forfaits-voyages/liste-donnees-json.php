@@ -3,6 +3,11 @@
 header("Content-Type: application/json");
 include_once "include/config.php";
 
+header('Content-Type: application/json;');
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Methods: POST, DELETE, PUT, OPTIONS");
+header('Access-Control-Allow-Headers: Content-Type');
+
 
 $mysqli = new mysqli($host, $username, $password, $database);
 
@@ -12,10 +17,11 @@ if ($mysqli->connect_errno) {
 }
 
 
-$resultat_requete = $mysqli->query("SELECT `nbr_occupants`, `activite_spa`, `service_transport`, `film_sur_demande`, `minibar_collation`, `qte_cartes_cadeaux`, `nbr-reclamations`, `nbr_annulations` FROM `bilan_analytique`");
+$resultat_requete = $mysqli->query("SELECT * FROM bilan_analytique");
 
 $donnees_tableau = $resultat_requete->fetch_all(MYSQLI_ASSOC);
 echo json_encode($donnees_tableau);
+
 
 $mysqli->close();
 ?>

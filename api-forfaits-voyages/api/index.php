@@ -14,10 +14,6 @@ if ($mysqli->connect_errno) {
 	echo 'Échec de connexion à la base de données MySQL: ' . $mysqli->connect_error;
 	exit();
 }
-
-$tinyint = (int) filter_var($valToCheck, FILTER_VALIDATE_BOOLEAN);
-
-
 switch ($_SERVER['REQUEST_METHOD']) {
 	case 'GET':  // GESTION DES DEMANDES DE TYPE GET
 		if (isset($_GET['id'])) {
@@ -32,6 +28,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 				$forfaitObj = ConversionForfaitSQLEnObjet($forfaitSQL);
 
 				echo json_encode($forfaitObj, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+				
 
 				$requete->close();
 			}
@@ -65,25 +62,29 @@ switch ($_SERVER['REQUEST_METHOD']) {
 		$coordonnees = $data['hotel']['coordonnees'];
 		$nombre_etoiles = $data['hotel']['nombre_etoiles'];
 		$nombre_chambres = $data['hotel']['nombre_chambres'];
-		$caracteristiques_str = $data['caracteristiques'];
+		$caracteristiques= $data['hotel']['caracteristiques'];
 		$date_de_depart = $data['date_de_depart'];
 		$date_de_retour = $data['date_de_retour'];
 		$prix = $data['prix'];
 		$rabais = $data['rabais'];
 		$vedette = $data['vedette'];
 
+		echo '"0":      '.(boolval("0") ? 'true' : 'false')."\n";
+		echo '"1":      '.(boolval("1") ? 'true' : 'false')."\n";
+		
 
-		if (isset($destination) && isset($ville_de_depart) && isset($nom_hotel) && isset($coordonnees) && isset($nombre_etoiles) && isset($nombre_chambres) && isset($caracteristiques_str) && isset($date_de_depart) && isset($date_de_retour) && isset($prix) && isset($rabais) && isset($vedette)) {
-			$caracteristiques = implode(';', $caracteristiques_str);
+		if (isset($destination) && isset($ville_de_depart) && isset($nom_hotel) && isset($coordonnees) && isset($nombre_etoiles) && isset($nombre_chambres) && isset($caracteristiques) && isset($date_de_depart) && isset($date_de_retour) && isset($prix) && isset($rabais) && isset($vedette)) {
+			$caracteristiques_str = implode(';', $caracteristiques);
 
 			if ($requete = $mysqli->prepare("INSERT INTO forfaits (destination, ville_de_depart, nom_hotel, coordonnees, nombre_etoiles, nombre_chambres, caracteristiques, date_de_depart, date_de_retour, prix, rabais, vedette) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-				$requete->bind_param("ssssiisssddi", $destination, $ville_de_depart, $nom_hotel, $coordonnees, $nombre_etoiles, $nombre_chambres, $caracteristiques, $date_de_depart, $date_de_retour, $prix, $rabais, $vedette);
+				$requete->bind_param("ssssiisssddi", $destination, $ville_de_depart, $nom_hotel, $coordonnees, $nombre_etoiles, $nombre_chambres, $caracteristiques_str, $date_de_depart, $date_de_retour, $prix, $rabais, $vedette);
 
 				if ($requete->execute()) {
 					$reponse->message .= "Succès";
 				} else {
 					$reponse->message .=  "Erreur dans l'exécution de la requête";
 				}
+
 
 				$requete->close();
 			} else {
@@ -110,7 +111,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 		$coordonnees = $data['hotel']['coordonnees'];
 		$nombre_etoiles = $data['hotel']['nombre_etoiles'];
 		$nombre_chambres = $data['hotel']['nombre_chambres'];
-		$caracteristiques_str = $data['caracteristiques'];
+		$caracteristiques= $data['hotel']['caracteristiques'];
 		$date_de_depart = $data['date_de_depart'];
 		$date_de_retour = $data['date_de_retour'];
 		$prix = $data['prix'];
@@ -120,11 +121,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
 		if (isset($_GET["id"])) {
 
-			if (isset($destination) && isset($ville_de_depart) && isset($nom_hotel) && isset($coordonnees) && isset($nombre_etoiles) && isset($nombre_chambres) && isset($caracteristiques_str) && isset($date_de_depart) && isset($date_de_retour) && isset($prix) && isset($rabais) && isset($vedette)) {
-				$caracteristiques = implode(';', $caracteristiques_str);
+			if (isset($destination) && isset($ville_de_depart) && isset($nom_hotel) && isset($coordonnees) && isset($nombre_etoiles) && isset($nombre_chambres) && isset($caracteristiques) && isset($date_de_depart) && isset($date_de_retour) && isset($prix) && isset($rabais) && isset($vedette)) {
+				$caracteristiques_str = implode(';', $caracteristiques);
 
 				if ($requete = $mysqli->prepare("UPDATE forfaits SET destination=?, ville_de_depart=?, nom_hotel=?, coordonnees=?, nombre_etoiles=?, nombre_chambres=?, caracteristiques=?, date_de_depart=?, date_de_retour=?, prix=?, rabais=?, vedette=? WHERE id=?")) {
-					$requete->bind_param("ssssiisssddii", $destination, $ville_de_depart, $nom_hotel, $coordonnees, $nombre_etoiles, $nombre_chambres, $caracteristiques, $date_de_depart, $date_de_retour, $prix, $rabais, $vedette, $_GET["id"]);
+					$requete->bind_param("ssssiisssddii", $destination, $ville_de_depart, $nom_hotel, $coordonnees, $nombre_etoiles, $nombre_chambres, $caracteristiques_str, $date_de_depart, $date_de_retour, $prix, $rabais, $vedette, $_GET["id"]);
 
 					if ($requete->execute()) {
 						$reponse->message .= "Succès";
@@ -164,6 +165,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 			$reponse->message .= "Erreur dans les paramètres (aucun identifiant fourni)";
 		}
 		echo json_encode($reponse, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
 
 		break;
 	default:

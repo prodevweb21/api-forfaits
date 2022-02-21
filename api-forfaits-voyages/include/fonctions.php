@@ -12,7 +12,7 @@ function ConversionForfaitSQLEnObjet($forfaitSQL) {
     $forfaitOBJ->hotel->nombre_etoiles = $forfaitSQL["nombre_etoiles"];
     $forfaitOBJ->hotel->nombre_chambres = $forfaitSQL["nombre_chambres"];
 
-    $forfaitOBJ->caracteristiques = explode(";", $forfaitSQL["caracteristiques"]);
+    $forfaitOBJ->hotel->caracteristiques = explode(";", $forfaitSQL["caracteristiques"]);
 
     $forfaitOBJ->date_de_depart = $forfaitSQL["date_de_depart"];
     $forfaitOBJ->date_de_retour = $forfaitSQL["date_de_retour"];
@@ -20,16 +20,11 @@ function ConversionForfaitSQLEnObjet($forfaitSQL) {
     $forfaitOBJ->rabais = $forfaitSQL["rabais"];
     $forfaitOBJ->vedette = $forfaitSQL["vedette"];
 
-    return $forfaitOBJ;
 
+return $forfaitOBJ;
 
 
 
 }
-
-
-
-
-
 ?>
 
