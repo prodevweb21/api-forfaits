@@ -20,14 +20,16 @@ function ConversionForfaitSQLEnObjet($forfaitSQL) {
     $forfaitOBJ->rabais = $forfaitSQL["rabais"];
     $forfaitOBJ->vedette = $forfaitSQL["vedette"];
 
-
-
-
-
-
-
-
     return $forfaitOBJ;
+
+
+
+
 }
+
+
+
+
+
 ?>
 

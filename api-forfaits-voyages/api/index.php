@@ -14,6 +14,10 @@ if ($mysqli->connect_errno) {
 	echo 'Échec de connexion à la base de données MySQL: ' . $mysqli->connect_error;
 	exit();
 }
+
+$tinyint = (int) filter_var($valToCheck, FILTER_VALIDATE_BOOLEAN);
+
+
 switch ($_SERVER['REQUEST_METHOD']) {
 	case 'GET':  // GESTION DES DEMANDES DE TYPE GET
 		if (isset($_GET['id'])) {
