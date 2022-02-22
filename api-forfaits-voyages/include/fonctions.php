@@ -1,6 +1,7 @@
 <?php
 function ConversionForfaitSQLEnObjet($forfaitSQL) {
     $forfaitOBJ = new stdClass();
+    $forfaitOBJ->id = $forfaitSQL["id"];
     $forfaitOBJ->destination = $forfaitSQL["destination"];
     $forfaitOBJ->ville_de_depart = $forfaitSQL["ville_de_depart"];
 
